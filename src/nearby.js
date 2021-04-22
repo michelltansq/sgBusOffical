@@ -1,13 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Text, Button, FlatList, TouchableHighlight, SectionList} from "react-native";
+import {StyleSheet, View, Text, Button, FlatList, TouchableHighlight} from "react-native";
 import { Ionicons } from '@expo/vector-icons'; 
 import * as Location from 'expo-location';
 import { acc } from 'react-native-reanimated';
 
 Nearby = ({ navigation }) => {
   const [busStopLocation, setBusStopLocation] = useState([]);
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
+  const [message, setMessage] = useState(<Text>Waiting...</Text>);
   const AccountKey = "We/4SNhISV+moxrLY/BVrw=="; 
 
   useEffect(() => {
@@ -19,26 +18,23 @@ Nearby = ({ navigation }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({}); 
-      setLocation(location.coords);
-    })();
-    
-    if (location) {
-      console.log(location);
-      fetch(`https://babasama.com/get_nearest_busstop_code?lat=${location.latitude}&long=${location.longitude}&AccountKey=We/4SNhISV+moxrLY/BVrw==`)
+      setMessage(<Text>Fetching from database...</Text>);
+
+      let data = await fetch(`https://babasama.com/get_nearest_busstop_code?lat=${location.coords.latitude}&long=${location.coords.longitude}&AccountKey=${AccountKey}`)
       .then((response) => response.json())
       .then((responseData) => {
         setBusStopLocation (responseData);
+        setMessage(<></>);
       })
       .catch(error => console.warn(error));
-    }
+    })();
   }, []);
-  
-
-  let results = (<Text>Waiting ...</Text>);
-  if (busStopLocation) {
-    results = (
+ 
+  return (
+    <View>
+      {message}
       <FlatList data={busStopLocation} renderItem={({item}) => (
-        <TouchableHighlight style={styles.section} onPress={() => navigation.navigate('Bus Stop')}>
+        <TouchableHighlight style={styles.section} onPress={() => navigation.navigate('Bus Stop'), {code: item.BusStopCode}}>
           <View style={styles.flex}>
             <View>
               <Text style={styles.name}>{item.Description}</Text>
@@ -48,12 +44,6 @@ Nearby = ({ navigation }) => {
           </View>
         </TouchableHighlight>
       )}/>
-    );
-  }
-
-  return (
-    <View>
-      {results}
       <Button
         title="Go to Bus Stop"
         onPress={() => navigation.navigate('Bus Stop')}
