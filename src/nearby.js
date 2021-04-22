@@ -50,7 +50,7 @@ Nearby = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   section: {
-    paddingVertical: 16,
+    padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#0000002E',
   },
