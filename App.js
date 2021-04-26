@@ -8,13 +8,33 @@ import busStop from "./src/busStop";
 import Nearby from "./src/nearby";
 import Favourite from "./src/favourite";
 import { StatusBar } from 'expo-status-bar';
+import {TouchableHighlight} from "react-native-gesture-handler";
+import {View, StyleSheet} from "react-native";
 
 const NearbyStack = createStackNavigator();
 
 NearbyStackScreen = () => {
   return (
     <NearbyStack.Navigator>
-      <NearbyStack.Screen name="sgBus" component={Nearby} />
+      <NearbyStack.Screen name="sgBus" component={Nearby}
+          options={({ navigation }) => ({
+              headerRight: ({}) => (
+                  <View style={styles.flex}>
+                      <TouchableHighlight style={styles.search}
+                      onPress={() => {
+                          navigation.navigate("Bus Stop")
+                      }}>
+                          <Ionicons name="search" size={24}/>
+                      </TouchableHighlight>
+                      <TouchableHighlight style={styles.ellipsisVertical} onPress={() => {
+                          navigation.navigate("Bus Stop")
+                      }}>
+                          <Ionicons name="ellipsis-vertical" size={24}/>
+                      </TouchableHighlight>
+                  </View>
+              )
+          })}
+      />
       <NearbyStack.Screen name="Bus Stop" component={busStop} />
     </NearbyStack.Navigator>
   );
@@ -59,3 +79,15 @@ export default App = () => {
       </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+    flex: {
+        flexDirection: "row",
+    },
+    ellipsisVertical: {
+        marginRight: 16,
+    },
+    search: {
+        marginRight: 24,
+    }
+});
