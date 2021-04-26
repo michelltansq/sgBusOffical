@@ -18,7 +18,7 @@ Nearby = ({ navigation }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({}); 
-      setMessage(<Text style={styles.waiting}>Fetching from database...</Text>);
+      setMessage(<Text style={styles.waiting}>Fetching from API...</Text>);
 
       let data = await fetch(`https://babasama.com/get_nearest_busstop_code?lat=${location.coords.latitude}&long=${location.coords.longitude}&AccountKey=${AccountKey}`)
       .then((response) => response.json())
@@ -34,7 +34,7 @@ Nearby = ({ navigation }) => {
     <View>
       {message}
       <FlatList data={busStopLocation} renderItem={({item}) => (
-        <TouchableHighlight style={styles.section} onPress={() => navigation.navigate('Bus Stop'), {code: item.BusStopCode, AccountKey: AccountKey}}>
+        <TouchableHighlight style={styles.section} onPress={() => navigation.navigate('Bus Stop', {code: item.BusStopCode, AccountKey: AccountKey})}>
           <View style={styles.flex}>
             <View>
               <Text style={styles.name}>{item.Description}</Text>
