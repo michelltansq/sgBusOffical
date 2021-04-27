@@ -3,9 +3,11 @@ import {StyleSheet, View, Text, Image, FlatList, TouchableHighlight, RefreshCont
 import { Ionicons } from '@expo/vector-icons'; 
 import * as Location from 'expo-location';
 import { acc } from 'react-native-reanimated';
+import { ScrollView } from 'react-native-gesture-handler';
 
 Nearby = ({ navigation }) => {
   const [busStopLocation, setBusStopLocation] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
   const [message, setMessage] = useState(<Image source={require('../assets/loading.gif')} style={styles.waiting}/>);
   const AccountKey = "We/4SNhISV+moxrLY/BVrw=="; 
 
@@ -28,9 +30,39 @@ Nearby = ({ navigation }) => {
     })();
   }, []);
  
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true)
+    setBusStopLocation([]);
+    setMessage(<Image source={require('../assets/loading.gif')} style={styles.waiting}/>);
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({}); 
+      let data = await fetch(`https://babasama.com/get_nearest_busstop_code?lat=${location.coords.latitude}&long=${location.coords.longitude}&AccountKey=${AccountKey}`)
+      .then((response) => response.json())
+      .then((responseData) => {
+        setBusStopLocation (responseData);
+        setMessage(<></>);
+        setRefreshing(false);
+      })
+      .catch(error => console.warn(error));
+    })();
+  })
+
   return (
     <View>
       {message}
+      <ScrollView refreshControl={
+        <RefreshControl refreshing={
+          refreshing
+        } onRefresh={
+          onRefresh
+        }/>
+      }>
       <FlatList data={busStopLocation} renderItem={({item}) => (
         <TouchableHighlight style={styles.section} onPress={() => navigation.navigate('Bus Stop', {code: item.BusStopCode, AccountKey: AccountKey, lat: item.Latitude, long: item.Longitude})}>
           <View style={styles.flex}>
@@ -42,6 +74,7 @@ Nearby = ({ navigation }) => {
           </View>
         </TouchableHighlight>
       )}/>
+      </ScrollView>
     </View>
   );
 }
