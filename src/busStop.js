@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
+import MapView , { Marker }from 'react-native-maps';
 
 const busStop = ({navigation, route}) => {
  
@@ -23,6 +24,17 @@ const busStop = ({navigation, route}) => {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <MapView style={{width: '100%', height: 200}} region={{
+        latitude: route.params.lat,
+        longitude: route.params.long,
+        latitudeDelta: 20,
+        longitudeDelta: 20
+      }}>
+        <Marker coordinate={{
+          latitude: route.params.lat,
+          longitude: route.params.long
+        }} title={"bus stop"}/>
+      </MapView>
       <Text>{text}</Text>
     </View>
   );

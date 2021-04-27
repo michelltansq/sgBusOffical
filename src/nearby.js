@@ -34,7 +34,7 @@ Nearby = ({ navigation }) => {
     <View>
       {message}
       <FlatList data={busStopLocation} renderItem={({item}) => (
-        <TouchableHighlight style={styles.section} onPress={() => navigation.navigate('Bus Stop', {code: item.BusStopCode, AccountKey: AccountKey})}>
+        <TouchableHighlight style={styles.section} onPress={() => navigation.navigate('Bus Stop', {code: item.BusStopCode, AccountKey: AccountKey, lat: item.Latitude, long: item.Longitude})}>
           <View style={styles.flex}>
             <View>
               <Text style={styles.name}>{item.Description}</Text>
