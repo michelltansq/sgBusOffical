@@ -27,8 +27,8 @@ const busStop = ({navigation, route}) => {
       <MapView style={{width: '100%', height: 200}} region={{
         latitude: route.params.lat,
         longitude: route.params.long,
-        latitudeDelta: 20,
-        longitudeDelta: 20
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001
       }}>
         <Marker coordinate={{
           latitude: route.params.lat,

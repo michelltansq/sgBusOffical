@@ -22,12 +22,12 @@ NearbyStackScreen = () => {
                   <View style={styles.flex}>
                       <TouchableHighlight style={styles.search}
                       onPress={() => {
-                          Nearby
+                          //todo: something search
                       }}>
                           <Ionicons name="search" size={24}/>
                       </TouchableHighlight>
                       <TouchableHighlight style={styles.ellipsisVertical} onPress={() => {
-                          navigation.navigate("Bus Stop")
+                          //todo: something more
                       }}>
                           <Ionicons name="ellipsis-vertical" size={24}/>
                       </TouchableHighlight>
