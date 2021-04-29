@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, FlatList, Image, StyleSheet} from 'react-native';
 import MapView , { Marker }from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
+import { TouchableHighlight } from 'react-native-gesture-handler';
+import favData from './favData';
 
 const busStop = ({navigation, route}) => {
  
@@ -90,7 +92,13 @@ const busStop = ({navigation, route}) => {
               }
             }
           }}/>
-          <Ionicons style={styles.icon} name={'heart-outline'} size={24} />
+          <TouchableHighlight style={{marginRight: 90, width: 24}} onPress={() => {
+            let newData = {BusNumber: item.BusNumber, BusStopCode: route.params.code};
+            favData.push(newData);
+            print(favData);
+          }}>
+            <Ionicons style={styles.icon} name={'heart-outline'} size={24} />
+          </TouchableHighlight>
         </View>
       )}/>
     </View>
@@ -122,11 +130,10 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   icon: {
-    flex: 1,
     justifyContent: 'center',
   },
   data: {
-    flex: 1.4,
+    flex: 1.3,
     flexDirection: 'row', 
     justifyContent: 'space-around',
     marginRight: 30,
