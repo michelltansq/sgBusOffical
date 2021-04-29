@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, FlatList, Image, StyleSheet} from 'react-native';
 import MapView , { Marker }from 'react-native-maps';
+import { Ionicons } from '@expo/vector-icons';
 
 const busStop = ({navigation, route}) => {
  
@@ -12,15 +13,9 @@ const busStop = ({navigation, route}) => {
         .then((response) => response.json())
         .then((responseJson) => {
           setBusStopData(responseJson);
-          console.log(responseJson);
       }); 
     })();
   }, []);
-
-  let text = "waiting"
-  if (busStopData) {
-    text = JSON.stringify(busStopData);
-  }
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -35,9 +30,112 @@ const busStop = ({navigation, route}) => {
           longitude: route.params.long
         }} title={"bus stop"}/>
       </MapView>
-      <Text>{text}</Text>
+      <FlatList data={busStopData} renderItem={({item}) => (
+        <View style={styles.flex}>
+          <Text style={styles.number}>{item.BusNumber}</Text>
+          <FlatList style={styles.data} data={item.BusData} renderItem={({item, index}) => {
+            if (item.BusModel === "DD") {
+              switch (index) {
+                case 0: 
+                  return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 0, 0, 0.5)'}]}>
+                        <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+                        <Image source={require('../assets/doubledeck.png')} style={styles.busIcon}/>
+                      </View>
+                case 1: 
+                  return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 255, 0, 0.5)'}]}>
+                          <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+                          <Image source={require('../assets/doubledeck.png')} style={styles.busIcon}/>
+                        </View>
+                case 2: 
+                  return <View style={[styles.arrival, {backgroundColor: 'rgba(0, 255, 0, 0.5)'}]}>
+                          <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+                          <Image source={require('../assets/doubledeck.png')} style={styles.busIcon}/>
+                        </View>
+              }
+            } else if (item.BusModel === "SD") {
+              switch (index) {
+                case 0: 
+                  return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 0, 0, 0.5)'}]}>
+                        <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+                        <Image source={require('../assets/singledeck.png')} style={styles.busIcon}/>
+                      </View>
+                case 1: 
+                  return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 255, 0, 0.5)'}]}>
+                        <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+                        <Image source={require('../assets/singledeck.png')} style={styles.busIcon}/>
+                      </View>
+                case 2: 
+                  return <View style={[styles.arrival, {backgroundColor: 'rgba(0, 255, 0, 0.5)'}]}>
+                        <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+                        <Image source={require('../assets/singledeck.png')} style={styles.busIcon}/>
+                      </View>
+              }
+            } else if (item.BusModel === "AB") {
+              switch (index) {
+                case 0: 
+                  return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 0, 0, 0.5)'}]}>
+                        <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+                        <Image source={require('../assets/bendydeck.png')} style={styles.busIcon}/>
+                      </View>
+                case 1: 
+                  return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 255, 0, 0.5)'}]}>
+                        <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+                        <Image source={require('../assets/bendydeck.png')} style={styles.busIcon}/>
+                      </View>
+                case 2: 
+                  return <View style={[styles.arrival, {backgroundColor: 'rgba(0, 255, 0, 0.5)'}]}>
+                        <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+                        <Image source={require('../assets/bendydeck.png')} style={styles.busIcon}/>
+                      </View>
+              }
+            }
+          }}/>
+          <Ionicons style={styles.icon} name={'heart-outline'} size={24} />
+        </View>
+      )}/>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  flex: {
+    width: '100%',
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: 16,
+  },
+  number: {
+    width: 100,
+    fontWeight: 'bold',
+    fontSize: 24,
+    paddingLeft: 16,
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  arrival: {
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10
+  },
+  icon: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  data: {
+    flex: 1.4,
+    flexDirection: 'row', 
+    justifyContent: 'space-around',
+    marginRight: 30,
+  },
+  busIcon: {
+    width: 50,
+    resizeMode: 'contain',
+    marginTop: 25
+  }
+});
 
 export default busStop; 
