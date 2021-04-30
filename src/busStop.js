@@ -30,12 +30,16 @@ const busStop = ({navigation, route}) => {
         }} title={"bus stop"}/>
       </MapView>
       <FlatList style={{width: '100%'}} data={busStopData} renderItem={({item}) => (
-        <View style={styles.flex}>
-          <Text style={styles.number}>{item.BusNumber}</Text>
-          <FlatList style={styles.data} data={item.BusData} renderItem={({item, index}) => {
-            return busModel(item, index);
-          }}/>
-        </View>
+        <TouchableHighlight onPress={() => 
+          navigation.navigate('Bus Route', {BusNumber: item.BusNumber, AccountKey: route.params.AccountKey})
+        }>
+          <View style={styles.flex}>
+            <Text style={styles.number}>{item.BusNumber}</Text>
+            <FlatList style={styles.data} data={item.BusData} renderItem={({item, index}) => {
+              return busModel(item, index);
+            }}/>
+          </View>
+        </TouchableHighlight>
       )}/>
     </View>
   );

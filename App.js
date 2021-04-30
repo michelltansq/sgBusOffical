@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import busStop from "./src/busStop";
+import route from "./src/route";
 import Nearby from "./src/nearby";
 import Search from "./src/search";
 import { StatusBar } from 'expo-status-bar';
@@ -30,6 +31,7 @@ NearbyStackScreen = () => {
           })}
       />
       <NearbyStack.Screen name="Bus Stop" component={busStop} />
+      <NearbyStack.Screen name="Bus Route" component={route} />
     </NearbyStack.Navigator>
   );
 }
@@ -40,6 +42,8 @@ SearchStackScreen = () => {
   return (
     <SearchStack.Navigator>
       <SearchStack.Screen name="Favourite" component={Search} />
+      <NearbyStack.Screen name="Bus Stop" component={busStop} />
+      <NearbyStack.Screen name="Bus Route" component={route} />
     </SearchStack.Navigator>
   );
 }
