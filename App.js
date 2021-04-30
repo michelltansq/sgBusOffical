@@ -6,7 +6,7 @@ import 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
 import busStop from "./src/busStop";
 import Nearby from "./src/nearby";
-import Favourite from "./src/favourite";
+import Search from "./src/search";
 import { StatusBar } from 'expo-status-bar';
 import {TouchableHighlight} from "react-native-gesture-handler";
 import {View, StyleSheet} from "react-native";
@@ -20,12 +20,6 @@ NearbyStackScreen = () => {
           options={({ navigation }) => ({
               headerRight: ({}) => (
                   <View style={styles.flex}>
-                      <TouchableHighlight style={styles.search}
-                      onPress={() => {
-                          //todo: something search
-                      }}>
-                          <Ionicons name="search" size={24}/>
-                      </TouchableHighlight>
                       <TouchableHighlight style={styles.ellipsisVertical} onPress={() => {
                           //todo: something more
                       }}>
@@ -40,13 +34,13 @@ NearbyStackScreen = () => {
   );
 }
 
-const FavouriteStack = createStackNavigator();
+const SearchStack = createStackNavigator();
 
-FavouriteStackScreen = () => {
+SearchStackScreen = () => {
   return (
-    <FavouriteStack.Navigator>
-      <FavouriteStack.Screen name="Favourite" component={Favourite} />
-    </FavouriteStack.Navigator>
+    <SearchStack.Navigator>
+      <SearchStack.Screen name="Favourite" component={Search} />
+    </SearchStack.Navigator>
   );
 }
 
@@ -62,7 +56,7 @@ export default App = () => {
               let iconName;
               if (route.name === 'Nearby') {
                 iconName = 'navigate';
-              } else if (route.name === 'Favourite') {
+              } else if (route.name === 'Search') {
                 iconName = 'heart';
               }
               return <Ionicons name={iconName} size={size} color={color} />;
@@ -74,7 +68,7 @@ export default App = () => {
           }}
         >
           <Tab.Screen name="Nearby" component={NearbyStackScreen} />
-          <Tab.Screen name="Favourite" component={FavouriteStackScreen} />
+          <Tab.Screen name="Search" component={SearchStackScreen} />
         </Tab.Navigator>
       </NavigationContainer>
   );
