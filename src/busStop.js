@@ -8,7 +8,7 @@ const busStop = ({navigation, route}) => {
 
   useEffect(() => {
     (async () => {
-      await fetch(`https://babasama.com/get_busstop_data?code=${route.params.code}&AccountKey=${route.params.AccountKey}`)
+      await fetch(`https://babasama.com/api/get_bus_arrival_timing?BusStopCode=${route.params.code}&AccountKey=${route.params.AccountKey}`)
         .then((response) => response.json())
         .then((responseJson) => {
           setBusStopData(responseJson);
@@ -31,10 +31,10 @@ const busStop = ({navigation, route}) => {
       </MapView>
       <FlatList style={{width: '100%'}} data={busStopData} renderItem={({item}) => (
         <TouchableHighlight onPress={() => 
-          navigation.navigate('Bus Route', {BusNumber: item.BusNumber, AccountKey: route.params.AccountKey})
+          navigation.navigate('Bus Route', {BusNumber: item.ServiceNo, AccountKey: route.params.AccountKey})
         }>
           <View style={styles.flex}>
-            <Text style={styles.number}>{item.BusNumber}</Text>
+            <Text style={styles.number}>{item.ServiceNo}</Text>
             <FlatList style={styles.data} data={item.BusData} renderItem={({item, index}) => {
               return busModel(item, index);
             }}/>
@@ -46,57 +46,57 @@ const busStop = ({navigation, route}) => {
 };
 
 const busModel = (item, index) => {
-  if (item.BusModel === "DD") {
+  if (item.Type === "DD") {
     switch (index) {
       case 0: 
         return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 0, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
               <Image source={require('../assets/doubledeck.png')} style={styles.busIcon}/>
             </View>
       case 1: 
         return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 255, 0, 0.5)'}]}>
-                <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+                <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
                 <Image source={require('../assets/doubledeck.png')} style={styles.busIcon}/>
               </View>
       case 2: 
         return <View style={[styles.arrival, {backgroundColor: 'rgba(0, 255, 0, 0.5)'}]}>
-                <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+                <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
                 <Image source={require('../assets/doubledeck.png')} style={styles.busIcon}/>
               </View>
     }
-  } else if (item.BusModel === "SD") {
+  } else if (item.Type === "SD") {
     switch (index) {
       case 0: 
         return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 0, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
               <Image source={require('../assets/singledeck.png')} style={styles.busIcon}/>
             </View>
       case 1: 
         return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 255, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
               <Image source={require('../assets/singledeck.png')} style={styles.busIcon}/>
             </View>
       case 2: 
         return <View style={[styles.arrival, {backgroundColor: 'rgba(0, 255, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
               <Image source={require('../assets/singledeck.png')} style={styles.busIcon}/>
             </View>
     }
-  } else if (item.BusModel === "AB") {
+  } else if (item.Type === "AB") {
     switch (index) {
       case 0: 
         return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 0, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
               <Image source={require('../assets/bendydeck.png')} style={styles.busIcon}/>
             </View>
       case 1: 
         return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 255, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
               <Image source={require('../assets/bendydeck.png')} style={styles.busIcon}/>
             </View>
       case 2: 
         return <View style={[styles.arrival, {backgroundColor: 'rgba(0, 255, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
               <Image source={require('../assets/bendydeck.png')} style={styles.busIcon}/>
             </View>
     }

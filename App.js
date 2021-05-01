@@ -9,27 +9,14 @@ import route from "./src/route";
 import Nearby from "./src/nearby";
 import Search from "./src/search";
 import { StatusBar } from 'expo-status-bar';
-import {TouchableHighlight} from "react-native-gesture-handler";
-import {View, StyleSheet} from "react-native";
+import {StyleSheet, TouchableHighlight} from "react-native";
 
 const NearbyStack = createStackNavigator();
 
 NearbyStackScreen = () => {
   return (
     <NearbyStack.Navigator>
-      <NearbyStack.Screen name="sgBus" component={Nearby}
-          options={({ navigation }) => ({
-              headerRight: ({}) => (
-                  <View style={styles.flex}>
-                      <TouchableHighlight style={styles.ellipsisVertical} onPress={() => {
-                          //todo: something more
-                      }}>
-                          <Ionicons name="ellipsis-vertical" size={24}/>
-                      </TouchableHighlight>
-                  </View>
-              )
-          })}
-      />
+      <NearbyStack.Screen name="sgBus" component={Nearby}/>
       <NearbyStack.Screen name="Bus Stop" component={busStop} />
       <NearbyStack.Screen name="Bus Route" component={route} />
     </NearbyStack.Navigator>

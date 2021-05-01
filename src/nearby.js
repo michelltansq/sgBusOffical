@@ -20,7 +20,7 @@ Nearby = ({ navigation }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({}); 
-      let data = await fetch(`https://babasama.com/get_nearest_busstop_code?lat=${location.coords.latitude}&long=${location.coords.longitude}&AccountKey=${AccountKey}`)
+      let data = await fetch(`https://babasama.com/api/get_nearest_bus_stop_code?lat=1.3682684621239454&long=103.85478177907359&AccountKey=${AccountKey}`)
       .then((response) => response.json())
       .then((responseData) => {
         setBusStopLocation (responseData);
@@ -42,7 +42,7 @@ Nearby = ({ navigation }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({}); 
-      let data = await fetch(`https://babasama.com/get_nearest_busstop_code?lat=${location.coords.latitude}&long=${location.coords.longitude}&AccountKey=${AccountKey}`)
+      let data = await fetch(`https://babasama.com/api/get_nearest_bus_stop_code?lat=1.3682684621239454&long=103.85478177907359&AccountKey=${AccountKey}`)
       .then((response) => response.json())
       .then((responseData) => {
         setBusStopLocation (responseData);
