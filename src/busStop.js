@@ -8,11 +8,11 @@ const busStop = ({navigation, route}) => {
 
   useEffect(() => {
     (async () => {
-      await fetch(`https://babasama.com/api/get_bus_arrival_timing?BusStopCode=${route.params.code}&AccountKey=${route.params.AccountKey}`)
+      await fetch(`https://babasama.com/get_busstop_data?code=${route.params.code}&AccountKey=${route.params.AccountKey}`)
         .then((response) => response.json())
         .then((responseJson) => {
           setBusStopData(responseJson);
-      }); 
+      });
     })();
   }, []);
 
@@ -30,73 +30,69 @@ const busStop = ({navigation, route}) => {
         }} title={"bus stop"}/>
       </MapView>
       <FlatList style={{width: '100%'}} data={busStopData} renderItem={({item}) => (
-        <TouchableHighlight onPress={() => 
-          navigation.navigate('Bus Route', {BusNumber: item.ServiceNo, AccountKey: route.params.AccountKey})
-        }>
-          <View style={styles.flex}>
-            <Text style={styles.number}>{item.ServiceNo}</Text>
-            <FlatList style={styles.data} data={item.BusData} renderItem={({item, index}) => {
-              return busModel(item, index);
-            }}/>
-          </View>
-        </TouchableHighlight>
+        <View style={styles.flex}>
+          <Text style={styles.number}>{item.BusNumber}</Text>
+          <FlatList style={styles.data} data={item.BusData} renderItem={({item, index}) => {
+            return busModel(item, index);
+          }}/>
+        </View>
       )}/>
     </View>
   );
 };
 
 const busModel = (item, index) => {
-  if (item.Type === "DD") {
+  if (item.BusModel === "DD") {
     switch (index) {
-      case 0: 
+      case 0:
         return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 0, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
               <Image source={require('../assets/doubledeck.png')} style={styles.busIcon}/>
             </View>
-      case 1: 
+      case 1:
         return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 255, 0, 0.5)'}]}>
-                <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
+                <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
                 <Image source={require('../assets/doubledeck.png')} style={styles.busIcon}/>
               </View>
-      case 2: 
+      case 2:
         return <View style={[styles.arrival, {backgroundColor: 'rgba(0, 255, 0, 0.5)'}]}>
-                <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
+                <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
                 <Image source={require('../assets/doubledeck.png')} style={styles.busIcon}/>
               </View>
     }
-  } else if (item.Type === "SD") {
+  } else if (item.BusModel === "SD") {
     switch (index) {
-      case 0: 
+      case 0:
         return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 0, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
               <Image source={require('../assets/singledeck.png')} style={styles.busIcon}/>
             </View>
-      case 1: 
+      case 1:
         return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 255, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
               <Image source={require('../assets/singledeck.png')} style={styles.busIcon}/>
             </View>
-      case 2: 
+      case 2:
         return <View style={[styles.arrival, {backgroundColor: 'rgba(0, 255, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
               <Image source={require('../assets/singledeck.png')} style={styles.busIcon}/>
             </View>
     }
-  } else if (item.Type === "AB") {
+  } else if (item.BusModel === "AB") {
     switch (index) {
-      case 0: 
+      case 0:
         return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 0, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
               <Image source={require('../assets/bendydeck.png')} style={styles.busIcon}/>
             </View>
-      case 1: 
+      case 1:
         return <View style={[styles.arrival, {backgroundColor: 'rgba(255, 255, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
               <Image source={require('../assets/bendydeck.png')} style={styles.busIcon}/>
             </View>
-      case 2: 
+      case 2:
         return <View style={[styles.arrival, {backgroundColor: 'rgba(0, 255, 0, 0.5)'}]}>
-              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.EstimatedArrival} </Text>
+              <Text style={{fontSize: 18, position: 'absolute', top: 2}}>{item.ArrivalTime} </Text>
               <Image source={require('../assets/bendydeck.png')} style={styles.busIcon}/>
             </View>
     }
@@ -128,9 +124,9 @@ const styles = StyleSheet.create({
   icon: {
     justifyContent: 'center',
   },
-  data: { 
+  data: {
     width: '70%',
-    flexDirection: 'row', 
+    flexDirection: 'row',
     justifyContent: 'space-around',
   },
   busIcon: {
@@ -140,4 +136,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default busStop; 
+export default busStop;
