@@ -1,7 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { Component, useEffect, useState } from 'react'
-import { Text, View, StyleSheet, TextInput, FlatList} from 'react-native'
-import { TouchableHighlight } from 'react-native-gesture-handler';
+import { Text, View, StyleSheet, TextInput, FlatList, Image, TouchableHighlight, Alert} from 'react-native'
 
 const search = ({navigation}) => {
     const [message, setMessage] = useState(<></>);
@@ -17,6 +16,9 @@ const search = ({navigation}) => {
             .then((responseJson) => {
                 setData(responseJson);
                 setMessage(<></>);
+                if (responseJson.output != null) {
+                    noDataAlert("Bus Stop Code");
+                }
             });
         } else if (searchText > 0) {
             await fetch(`https://babasama.com/api/get_bus_data?BusNumber=${searchText}&AccountKey=${accKey}`)
@@ -24,9 +26,22 @@ const search = ({navigation}) => {
             .then((responseJson) => {
                 setData(responseJson);
                 setMessage(<></>);
+                if (responseJson.output != null) {
+                    noDataAlert("Bus Stop Code");
+                }
             });
         }
     }
+
+    const noDataAlert = (type) =>
+    Alert.alert(
+      "No Data Found",
+      `${type} is not found, please enter another number`,
+      [
+        { text: "OK"}
+      ],
+      { cancelable: true }
+    );
 
     return(<View style={styles.container}>
         <View style={styles.searchbg}>
@@ -44,18 +59,54 @@ const search = ({navigation}) => {
         </View>
         <View style={styles.listbg}>
             {message}
-            <FlatList data={dataReturned} renderItem={({item, index}) => {
-                if (searchText < 5) {
-                    return (<View>
-                        <Text>{item.ServiceNo}</Text>
+            <FlatList style={styles.list} data={dataReturned} renderItem={({item}) => {
+                if (searchText.length < 5) {
+                    return (<View style={styles.list}>
+                        <Text style={styles.header}>{item.ServiceNo}</Text>
+                        <View style={styles.textbox}>
+                            <Text style={styles.textheader}> First Bus Stop: </Text>
+                            <Text style={styles.textbody}>{item.OriginCode}</Text>
+                        </View>
+                        <View style={styles.textbox}>
+                            <Text style={styles.textheader}> Last Bus Stop: </Text>
+                            <Text style={styles.textbody}>{item.DestinationCode}</Text>
+                        </View>
+                        <View style={styles.textbox}>
+                            <Text style={styles.textheader}> Morning peak hours: </Text>
+                            <Text style={styles.textbody}>{item.AM_Peak_Freq}</Text>
+                        </View>
+                        <View style={styles.textbox}>
+                            <Text style={styles.textheader}> Morning non peak hours: </Text>
+                            <Text style={styles.textbody}>{item.AM_Offpeak_Freq}</Text>
+                        </View>
+                        <View style={styles.textbox}>
+                            <Text style={styles.textheader}> Evening peak hours: </Text>
+                            <Text style={styles.textbody}>{item.PM_Peak_Freq}</Text>
+                        </View>
+                        <View style={styles.textbox}>
+                            <Text style={styles.textheader}> Evening off peak hours: </Text>
+                            <Text style={styles.textbody}>{item.PM_Offpeak_Freq}</Text>
+                        </View>
+                        <View style={styles.textbox}> 
+                            <Text style={styles.textheader}> Operator: </Text>
+                            <Text style={styles.textbody}>{item.Operator}</Text>
+                        </View>
                     </View>);
                 } else {
-                    return (<View>
-                        <Text>{item.BusStopCode}</Text>
+                    return (<View style={styles.list}>
+                         <Text style={styles.header}>{item.BusStopCode}</Text>
+                        <View style={styles.textbox}>
+                            <Text style={styles.textheader}> Bus Stop Name: </Text>
+                            <Text style={styles.textbody}>{item.Description}</Text>
+                        </View>
+                        <View style={styles.textbox}>
+                            <Text style={styles.textheader}> Road Name: </Text>
+                            <Text style={styles.textbody}>{item.RoadName}</Text>
+                        </View>
                     </View>)
                 }
             }}/>
-        </View>
+        </View> 
     </View>);
 }
 
@@ -68,7 +119,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     }, listbg: {
         width: '100%',
         flex: 2,
@@ -88,6 +139,27 @@ const styles = StyleSheet.create({
     }, textinputSearchButton: {
         alignSelf: 'center',
         marginLeft: '65%'
+    }, waiting: {
+        maxWidth: '100%',
+        resizeMode: 'contain'
+    }, list: {
+        width: '100%',
+        alignSelf: 'center',
+    }, header: {
+        textAlign: 'center',
+        fontSize: 26,
+        fontWeight: 'bold',
+        marginBottom: 25,
+    }, textbox: {
+        flexDirection: 'row',
+    }, textheader: {
+        flex: 1,
+        paddingHorizontal: 15, 
+        textAlign: 'right',
+    }, textbody: {
+        flex: 1,
+        paddingHorizontal: 15,
+        alignSelf: 'flex-start',
     }
 });
 
