@@ -7,9 +7,9 @@ import { Ionicons } from '@expo/vector-icons';
 import busStop from "./src/busStop";
 import Nearby from "./src/nearby";
 import Search from "./src/search";
+import Route from "./src/route";
 import { StatusBar } from 'expo-status-bar';
-import {TouchableHighlight} from "react-native-gesture-handler";
-import {View, StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
 
 const NearbyStack = createStackNavigator();
 
@@ -18,6 +18,7 @@ NearbyStackScreen = () => {
     <NearbyStack.Navigator>
       <NearbyStack.Screen name="sgBus" component={Nearby}/>
       <NearbyStack.Screen name="Bus Stop" component={busStop} />
+      <NearbyStack.Screen name="Bus Route" component={Route} />
     </NearbyStack.Navigator>
   );
 }
@@ -27,7 +28,9 @@ const SearchStack = createStackNavigator();
 SearchStackScreen = () => {
   return (
     <SearchStack.Navigator>
-      <SearchStack.Screen name="Favourite" component={Search} />
+      <SearchStack.Screen name="Saerch" component={Search} />
+      <NearbyStack.Screen name="Bus Stop" component={busStop} />
+      <NearbyStack.Screen name="Bus Route" component={Route} />
     </SearchStack.Navigator>
   );
 }
@@ -45,7 +48,7 @@ export default App = () => {
               if (route.name === 'Nearby') {
                 iconName = 'navigate';
               } else if (route.name === 'Search') {
-                iconName = 'search';
+                iconName = 'search-outline';
               }
               return <Ionicons name={iconName} size={size} color={color} />;
             },
