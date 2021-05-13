@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Text, Image, FlatList, TouchableHighlight, RefreshControl} from "react-native";
+import {StyleSheet, View, Text, Image, FlatList, TouchableHighlight, RefreshControl, Appearance} from "react-native";
 import { Ionicons } from '@expo/vector-icons'; 
 import * as Location from 'expo-location';
 import { acc } from 'react-native-reanimated';
@@ -11,7 +11,16 @@ Nearby = ({ navigation }) => {
   const [message, setMessage] = useState(<Image source={require('../assets/loading.gif')} style={styles.waiting}/>);
   const accessData = {user_acc_key: 1111111, username: 'Michell_Tan'};
 
+  const waiting = () => {
+    if (Appearance.getColorScheme === 'dark') 
+      setMessage(<Image source={require('../assets/loading-dark.gif')} style={styles.waiting}/>)
+    else 
+      setMessage(<Image source={require('../assets/loading.gif')} style={styles.waiting}/>)
+  }
+
   useEffect(() => {
+    waiting();
+
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -33,7 +42,7 @@ Nearby = ({ navigation }) => {
   const onRefresh = React.useCallback(() => {
     setRefreshing(true)
     setBusStopLocation([]);
-    setMessage(<Image source={require('../assets/loading.gif')} style={styles.waiting}/>);
+    waiting();
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -64,7 +73,7 @@ Nearby = ({ navigation }) => {
         }/>
       }>
       <FlatList data={busStopLocation} renderItem={({item}) => (
-        <TouchableHighlight style={styles.section} onPress={() => navigation.navigate('Bus Stop', {code: item.BusStopCode, accessData: accessData, lat: item.Latitude, long: item.Longitude})}>
+        <TouchableHighlight style={styles.section} onPress={() => navigation.navigate('Bus Stop', {code: item.BusStopCode, lat: item.Latitude, long: item.Longitude})}>
           <View style={styles.flex}>
             <View>
               <Text style={styles.name}>{item.Description}</Text>

@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { Component, useEffect, useState } from 'react'
-import { Text, View, StyleSheet, TextInput, FlatList, Image, TouchableHighlight, Alert} from 'react-native'
+import { Text, View, StyleSheet, TextInput, FlatList, Image, TouchableHighlight, Alert, Appearance} from 'react-native'
 
 const search = ({navigation}) => {
     const [message, setMessage] = useState(<></>);
@@ -8,7 +8,12 @@ const search = ({navigation}) => {
     const [dataReturned, setData] = useState([]);
     const accessData = {user_acc_key: 1111111, username: 'Michell_Tan'}
 
-    const accKey = "We/4SNhISV+moxrLY/BVrw==";
+    const waiting = () => {
+        if (Appearance.getColorScheme === 'dark') 
+          setMessage(<Image source={require('../assets/loading-dark.gif')} style={styles.waiting}/>)
+        else 
+          setMessage(<Image source={require('../assets/loading.gif')} style={styles.waiting}/>)
+      }
 
     const getData = async() => {
         if (searchText.length > 4) {
@@ -50,8 +55,8 @@ const search = ({navigation}) => {
             <TextInput style={styles.textinput} placeholder="Search" onChangeText={setSearchText}/>
                 <View style={styles.textinputSearchButton}>
                     <TouchableHighlight onPress={() => {
+                        waiting();  
                         getData();
-                        setMessage(<Image source={require('../assets/loading.gif')} style={styles.waiting}/>);
                     }}>
                         <Ionicons name="search-outline" size={20}/>
                     </TouchableHighlight>
