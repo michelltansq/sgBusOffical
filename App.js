@@ -28,7 +28,7 @@ const SearchStack = createStackNavigator();
 SearchStackScreen = () => {
   return (
     <SearchStack.Navigator>
-      <SearchStack.Screen name="Saerch" component={Search} />
+      <SearchStack.Screen name="Search" component={Search} />
       <NearbyStack.Screen name="Bus Stop" component={busStop} />
       <NearbyStack.Screen name="Bus Route" component={Route} />
     </SearchStack.Navigator>

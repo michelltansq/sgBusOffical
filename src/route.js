@@ -10,7 +10,7 @@ const route = ({route}) => {
     const [map, setMap] = useState(<></>);
 
     const getData = async() => {
-        await fetch(`https://babasama.com/api/get_bus_route?BusNumber=${route.params.BusNumber}&AccountKey=${route.params.AccountKey}`)
+        await fetch(`https://babasama.com/api/get_bus_route?ServiceNo=${route.params.BusNumber}&accountkey=${route.params.accessData.user_acc_key}&username=${route.params.accessData.username}`)
         .then((response) => response.json())
         .then((responseJson) => {
             setRouteData(responseJson);
@@ -39,7 +39,7 @@ const route = ({route}) => {
                     <Ionicons name={'swap-vertical-outline'} size={20} />
                 </TouchableHighlight>
             </View>
-            <FlatList style={{width: '100%'}} data={data} renderItem={({item}) => (
+            <FlatList style={{width: '100%'}} data={routeData} renderItem={({item}) => (
                 <TouchableHighlight onPress={() => 
                     setMap(<MapView style={{width: '100%', height: 200}} region={{
                         latitude: item.Latitude,

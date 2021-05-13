@@ -9,7 +9,7 @@ Nearby = ({ navigation }) => {
   const [busStopLocation, setBusStopLocation] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [message, setMessage] = useState(<Image source={require('../assets/loading.gif')} style={styles.waiting}/>);
-  const AccountKey = "We/4SNhISV+moxrLY/BVrw=="; 
+  const accessData = {user_acc_key: 1111111, username: 'Michell_Tan'};
 
   useEffect(() => {
     (async () => {
@@ -20,7 +20,7 @@ Nearby = ({ navigation }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({}); 
-      let data = await fetch(`https://babasama.com/api/get_nearest_bus_stop_code?lat=1.3682684621239454&long=103.85478177907359&AccountKey=${AccountKey}`)
+      let data = await fetch(`https://babasama.com/api/get_nearest_bus_stop?accountkey=${accessData.user_acc_key}&username=${accessData.username}&Latitude=${location.coords.latitude}&Longitude=${location.coords.longitude}`)
       .then((response) => response.json())
       .then((responseData) => {
         setBusStopLocation (responseData);
@@ -42,7 +42,7 @@ Nearby = ({ navigation }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({}); 
-      let data = await fetch(`https://babasama.com/api/get_nearest_bus_stop_code?lat=1.3682684621239454&long=103.85478177907359&AccountKey=${AccountKey}`)
+      let data = await fetch(`https://babasama.com/api/get_nearest_bus_stop?accountkey=${accessData.user_acc_key}&username=${accessData.username}&Latitude=${location.coords.latitude}&Longitude=${location.coords.longitude}`)
       .then((response) => response.json())
       .then((responseData) => {
         setBusStopLocation (responseData);
@@ -64,7 +64,7 @@ Nearby = ({ navigation }) => {
         }/>
       }>
       <FlatList data={busStopLocation} renderItem={({item}) => (
-        <TouchableHighlight style={styles.section} onPress={() => navigation.navigate('Bus Stop', {code: item.BusStopCode, AccountKey: AccountKey, lat: item.Latitude, long: item.Longitude})}>
+        <TouchableHighlight style={styles.section} onPress={() => navigation.navigate('Bus Stop', {code: item.BusStopCode, accessData: accessData, lat: item.Latitude, long: item.Longitude})}>
           <View style={styles.flex}>
             <View>
               <Text style={styles.name}>{item.Description}</Text>
