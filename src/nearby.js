@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Text, Image, FlatList, TouchableHighlight, RefreshControl, Appearance} from "react-native";
+import {StyleSheet, View, Text, Image, FlatList, TouchableHighlight, RefreshControl, Appearance, SafeAreaView} from "react-native";
 import { Ionicons } from '@expo/vector-icons'; 
 import * as Location from 'expo-location';
 import { acc } from 'react-native-reanimated';
@@ -20,7 +20,6 @@ Nearby = ({ navigation }) => {
 
   useEffect(() => {
     waiting();
-
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -29,7 +28,7 @@ Nearby = ({ navigation }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({}); 
-      let data = await fetch(`https://babasama.com/api/get_nearest_bus_stop?accountkey=${accessData.user_acc_key}&username=${accessData.username}&Latitude=${location.coords.latitude}&Longitude=${location.coords.longitude}`)
+      await fetch(`https://babasama.com/api/get_nearest_bus_stop?accountkey=${accessData.user_acc_key}&username=${accessData.username}&Latitude=${location.coords.latitude}&Longitude=${location.coords.longitude}&amount=10`)
       .then((response) => response.json())
       .then((responseData) => {
         setBusStopLocation (responseData);
@@ -51,7 +50,7 @@ Nearby = ({ navigation }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({}); 
-      let data = await fetch(`https://babasama.com/api/get_nearest_bus_stop?accountkey=${accessData.user_acc_key}&username=${accessData.username}&Latitude=${location.coords.latitude}&Longitude=${location.coords.longitude}`)
+      let data = await fetch(`https://babasama.com/api/get_nearest_bus_stop?accountkey=${accessData.user_acc_key}&username=${accessData.username}&Latitude=${location.coords.latitude}&Longitude=${location.coords.longitude}&amount=10`)
       .then((response) => response.json())
       .then((responseData) => {
         setBusStopLocation (responseData);
@@ -72,18 +71,19 @@ Nearby = ({ navigation }) => {
           onRefresh
         }/>
       }>
-      <FlatList data={busStopLocation} renderItem={({item}) => (
-        <TouchableHighlight style={styles.section} onPress={() => navigation.navigate('Bus Stop', {code: item.BusStopCode, lat: item.Latitude, long: item.Longitude})}>
-          <View style={styles.flex}>
-            <View>
-              <Text style={styles.name}>{item.Description}</Text>
-              <Text style={styles.information}>{item.BusStopCode} | {item.RoadName}</Text>
+        <FlatList data={busStopLocation} renderItem={({item}) => (
+          <TouchableHighlight style={styles.section} onPress={() => navigation.navigate('Bus Stop', {code: item.BusStopCode, lat: item.Latitude, long: item.Longitude})}>
+            <View style={styles.flex}>
+              <View>
+                <Text style={styles.name}>{item.Description}</Text>
+                <Text style={styles.information}>{item.BusStopCode} | {item.RoadName}</Text>
+              </View>
+              <Ionicons style={styles.icon} name={'chevron-forward'} size={20} />
             </View>
-            <Ionicons style={styles.icon} name={'chevron-forward'} size={20} />
-          </View>
-        </TouchableHighlight>
-      )}/>
+          </TouchableHighlight>
+        )}/>
       </ScrollView>
+      
     </View>
   );
 }
